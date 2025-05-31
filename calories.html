@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Low Calorie Foods</title>
+</head>
+<body>
+  <h1 style="background-color:#007c7a; color:white; padding:10px;">Low Calorie Breakfast (≤ 700)</h1>
+  <div id="calorieFilter"></div>
+  <div id="totalCalories" style="margin-top:20px; font-weight:bold;"></div>
+
+  <script>
+    fetch('menu.html')
+      .then(response => response.text())
+      .then(data => {
+        const tempDoc = new DOMParser().parseFromString(data, 'text/html');
+        const xmlData = tempDoc.getElementById('menuXML').textContent;
+        const xml = new DOMParser().parseFromString(xmlData, "text/xml");
+        const foods = xml.getElementsByTagName("food");
+
+        const calorieDiv = document.getElementById("calorieFilter");
+        const totalDiv = document.getElementById("totalCalories");
+        let totalCalories = 0;
+
+        for (let food of foods) {
+          const name = food.getElementsByTagName("name")[0].textContent;
+          const price = food.getElementsByTagName("price")[0].textContent;
+          const description = food.getElementsByTagName("description")[0].textContent;
+          const calories = parseInt(food.getElementsByTagName("calories")[0].textContent);
+
+          if (calories <= 700) {
+            const html = `<p><strong>${name}</strong> - ${price}<br>${description} (${calories} calories)</p>`;
+            calorieDiv.innerHTML += html;
+            totalCalories += calories;
+          }
+        }
+
+        totalDiv.innerHTML = `Total Calories: ${totalCalories}`;
+      });
+  </script>
+</body>
+</html>
