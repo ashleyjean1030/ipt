@@ -4,11 +4,13 @@
   <title>Breakfast Menu</title>
 </head>
 <body>
-  <h1 style="background-color:#007c7a; color:white; padding:10px;">Breakfast Menu</h1>
+  <h1 style="background-color:#007c7a; color:white; padding:10px;">A. Breakfast Menu</h1>
   <div id="allItems"></div>
-  <h2 style="background-color:#007c7a; color:white; padding:10px;">Food with Price > $5.00</h2>
+
+  <h2 style="background-color:#007c7a; color:white; padding:10px;">B. Food with Price greater than $5.00 and Calories less than or equal to 700</h2>
   <div id="priceFilter"></div>
-  <h2 style="background-color:#007c7a; color:white; padding:10px;">Food with Calories ≤ 700</h2>
+
+  <h2 style="background-color:#007c7a; color:white; padding:10px;">C. Food with Calories less than or equal to 700</h2>
   <div id="calorieFilter"></div>
 
   <script>
@@ -24,29 +26,38 @@
         const priceDiv = document.getElementById("priceFilter");
         const calorieDiv = document.getElementById("calorieFilter");
 
-        let totalCalories = 0;
+        let totalCaloriesA = 0;
+        let totalCaloriesB = 0;
+        let totalCaloriesC = 0;
 
         for (let food of foods) {
           const name = food.getElementsByTagName("name")[0].textContent;
           const price = food.getElementsByTagName("price")[0].textContent;
           const description = food.getElementsByTagName("description")[0].textContent;
           const calories = parseInt(food.getElementsByTagName("calories")[0].textContent);
+          const priceValue = parseFloat(price.replace('$', ''));
 
-          totalCalories += calories;
+          totalCaloriesA += calories;
 
           const html = `<p><strong>${name}</strong> - ${price}<br>${description} (${calories} calories)</p>`;
           allDiv.innerHTML += html;
 
-          if (parseFloat(price.replace('$', '')) > 5.00) {
+          // Section B: Price > $5.00 AND Calories <= 700
+          if (priceValue > 5.00 && calories <= 700) {
             priceDiv.innerHTML += html;
+            totalCaloriesB += calories;
           }
 
+          // Section C: Calories <= 700
           if (calories <= 700) {
             calorieDiv.innerHTML += html;
+            totalCaloriesC += calories;
           }
         }
 
-        allDiv.innerHTML += `<p><strong>Total Calories:</strong> ${totalCalories} calories</p>`;
+        allDiv.innerHTML += `<p><strong>Total Calories (A):</strong> ${totalCaloriesA} calories</p>`;
+        priceDiv.innerHTML += `<p><strong>Total Calories (B):</strong> ${totalCaloriesB} calories</p>`;
+        calorieDiv.innerHTML += `<p><strong>Total Calories (C):</strong> ${totalCaloriesC} calories</p>`;
       });
   </script>
 </body>
